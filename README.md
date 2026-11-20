@@ -3,7 +3,7 @@
 > 每天自动抓取 AI 前沿资讯 → 去重 → 预筛 → **让模型按热度与相关度挑出 5 条** → 生成中文日报 → 推送到邮箱。
 
 ![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
-![Tests](https://img.shields.io/badge/tests-74%20passed-green)
+![Tests](https://img.shields.io/badge/tests-70%20passed-green)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![LLM](https://img.shields.io/badge/LLM-OpenAI%20compatible-orange)
 

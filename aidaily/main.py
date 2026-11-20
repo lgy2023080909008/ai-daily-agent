@@ -11,6 +11,7 @@ from __future__ import annotations
 import logging
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 from .config import Settings
 from .db import Store
@@ -123,8 +124,16 @@ def run_once(
     )
     digest.markdown = render_markdown(digest)
 
-    # 6. 落库 + 推送（先推送成功再标记已推，避免推送失败后内容丢失）
+    # 6. 落库 + 存档 + 推送
+    # 先无条件把 Markdown 存一份到本地：不管推送用什么渠道（邮件/飞书/…），
+    # 都应该能在磁盘上找到"今天到底发了什么"，否则线上排查只能靠猜。
     if not dry_run:
+        out_dir = Path(settings.out_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        digest_path = out_dir / f"{date_str}.md"
+        digest_path.write_text(digest.markdown, encoding="utf-8")
+        log.info("日报已存档：%s", digest_path)
+
         for item in items:
             store.save_item(item, date_str)
         notifier = build_notifier(settings)

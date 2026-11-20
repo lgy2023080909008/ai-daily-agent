@@ -58,6 +58,20 @@ def test_dry_run_does_not_write_digest_file(settings, workdir):
     assert not list((workdir / "out").glob("*.md"))
 
 
+def test_non_dry_run_always_archives_digest(settings, workdir):
+    """即使推送渠道是邮件（不写本地文件），也要把当天 Markdown 存档。
+
+    线上排查靠这个文件；没有它，GitHub Actions 的 artifact 永远是空的。
+    """
+    settings.notify_channel = "email"   # 没配 SMTP，发送会失败，但存档照做
+    digest = run_once(
+        settings, client=LLMClient(None), raw_docs=sample_raw_docs(), dry_run=False
+    )
+    saved = workdir / "out" / f"{digest.date}.md"
+    assert saved.exists()
+    assert "AI 技术前沿日报" in saved.read_text(encoding="utf-8")
+
+
 def test_select_failure_raises_and_rolls_back(settings):
     """模型选不出来（且不是离线 mock）时要报错，并把这一轮入库的条目回滚。"""
 
