@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.pytest_cache/
+.tmp-tests/
+.idea/
+.vscode/
+.DS_Store
+
+# 运行产物：不提交（数据库、缓存、日报）
+data/*
+!data/.gitkeep
+
+# 评测跑出来的结果也属于产物
+eval/results/

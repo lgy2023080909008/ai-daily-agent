@@ -1,0 +1,11 @@
+# 运行时依赖（Python 3.11 / 3.12 验证）
+# 不锁 langchain 大版本：0.3 与 1.x 的 ChatModel 接口都兼容本项目的用法
+requests>=2.31,<3.0
+pydantic>=2.7,<3.0
+pydantic-settings>=2.2,<3.0
+python-dotenv>=1.0,<2.0
+langchain-core>=0.3
+langchain-openai>=0.2
+
+# 测试
+pytest>=8.0,<10.0
