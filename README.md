@@ -3,7 +3,7 @@
 > 每天自动抓取 AI 前沿资讯 → 去重 → 预筛 → **让模型按热度与相关度挑出 5 条** → 生成中文日报 → 推送到邮箱。
 
 ![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
-![Tests](https://img.shields.io/badge/tests-70%20passed-green)
+![Tests](https://img.shields.io/badge/tests-78%20passed-green)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![LLM](https://img.shields.io/badge/LLM-OpenAI%20compatible-orange)
 
@@ -12,8 +12,7 @@
 > **运行现状**（跑在 GitHub Actions，每天北京时间 08:00 自动执行）
 > 抓取约 100 条 → 去重 + 预筛 30 条候选 → 模型精选 5 条 → 生成中文摘要 → 邮件推送，单次约 20 秒，成本不到 0.1 元。
 
-<!-- 收到日报后把截图存到 docs/screenshot.png，然后删掉下面这行的注释，仓库首页会好看很多 -->
-<!-- ![日报截图](docs/screenshot.png) -->
+![日报截图](docs/screenshot.png)
 
 它要解决的不是"调个模型总结新闻"，而是四件容易做错的事：
 

@@ -1,57 +1,41 @@
+> 本文件是离线 mock 模式生成的样例（无 API Key 时），真实模型输出见 docs/screenshot.png。
+
 # AI 技术前沿日报 · 2026-11-20
 
-> 抓取 70 条 · 新增 70 条 · 去重后 70 条 · 评分 70 条 · 精选 5 条
+> 抓取 5 条 · 新增 4 条 · 去重后 4 条 · 候选 4 条 · 精选 4 条
 
-## 1. Posterior Matching Distillation
+## 1. OpenReasoner-7B: Open-Source Reasoning Model with Verifier-Guided Decoding
 
-**arXiv** ｜ 评分 3.6/5（相关性 4 · 新颖度 3） ｜ [原文](http://arxiv.org/abs/2611.26629v1)
+**HF Daily** ｜ 热度 128 赞 ｜ [原文](https://huggingface.co/papers/2601.00002)
 
-**摘要**：Posterior Matching Distillation（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
+**为什么选它**：mock：按候选顺序取前几条
 
-**推荐理由**：mock 推荐理由：仅用于验证链路
+**摘要**：OpenReasoner-7B: Open-Source Reasoning Model wit（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
 
-`mock`
+## 2. AgentBench-X: Evaluating Long-Horizon Tool Use in LLM Agents
 
-## 2. RL Post-Training in Diffusion Transformers Is Activation Steering
+**arXiv** ｜ [原文](https://arxiv.org/abs/2601.00001)
 
-**arXiv** ｜ 评分 3.6/5（相关性 4 · 新颖度 3） ｜ [原文](http://arxiv.org/abs/2611.26627v1)
+**为什么选它**：mock：按候选顺序取前几条
 
-**摘要**：RL Post-Training in Diffusion Transformers Is Ac（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
+**摘要**：AgentBench-X: Evaluating Long-Horizon Tool Use i（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
 
-**推荐理由**：mock 推荐理由：仅用于验证链路
+## 3. 某厂商发布新一代多模态大模型，推理成本下降 40%
 
-`mock`
+**jiqizhixin.com** ｜ [原文](https://www.jiqizhixin.com/articles/example)
 
-## 3. PlayCraft: Designing Engaging Games from Agent Play Experience
+**为什么选它**：mock：按候选顺序取前几条
 
-**arXiv** ｜ 评分 3.6/5（相关性 4 · 新颖度 3） ｜ [原文](http://arxiv.org/abs/2611.26624v1)
+**摘要**：某厂商发布新一代多模态大模型，推理成本下降 40%（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
 
-**摘要**：PlayCraft: Designing Engaging Games from Agent P（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
+## 4. acme/agent-flow（★1280）
 
-**推荐理由**：mock 推荐理由：仅用于验证链路
+**GitHub** ｜ 热度 ★1280 ｜ [原文](https://github.com/acme/agent-flow)
 
-`mock`
+**为什么选它**：mock：按候选顺序取前几条
 
-## 4. TideCache: Efficient Hybrid LLM Serving with Transparent Cache Management and Layer-Wise Streaming
-
-**arXiv** ｜ 评分 3.6/5（相关性 4 · 新颖度 3） ｜ [原文](http://arxiv.org/abs/2611.26619v1)
-
-**摘要**：TideCache: Efficient Hybrid LLM Serving with Tra（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
-
-**推荐理由**：mock 推荐理由：仅用于验证链路
-
-`mock`
-
-## 5. One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning
-
-**arXiv** ｜ 评分 3.6/5（相关性 4 · 新颖度 3） ｜ [原文](http://arxiv.org/abs/2611.26617v1)
-
-**摘要**：One Prior, Two Dynamics: Repurposing Video Diffu（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
-
-**推荐理由**：mock 推荐理由：仅用于验证链路
-
-`mock`
+**摘要**：acme/agent-flow（★1280）（mock 摘要，配置 LLM_API_KEY 后为真实中文摘要）
 
 ---
 
-由 [ai-daily-agent](https://github.com/) 自动生成：抓取 → 去重 → 打分 → 摘要 → 推送。
+由 [ai-daily-agent](https://github.com/) 自动生成：抓取 → 去重 → 预筛 → 精选 → 摘要 → 推送。

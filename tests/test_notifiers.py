@@ -32,3 +32,44 @@ def test_email_without_config_returns_false(settings):
     settings.mail_to = ""
     assert EmailNotifier(settings).configured is False
     assert EmailNotifier(settings).send("t", "md") is False
+
+
+# ---------------------------------------------------------------- Markdown 转 HTML
+def test_markdown_to_html_basic():
+    from aidaily.notifiers.email import markdown_to_html
+
+    md = (
+        "# AI 技术前沿日报 · 2026-11-20\n"
+        "\n"
+        "> 抓取 128 条 · 精选 5 条\n"
+        "\n"
+        "## 1. TideCache\n"
+        "\n"
+        "**GitHub** ｜ [原文](https://github.com/x)\n"
+        "\n"
+        "---\n"
+    )
+    out = markdown_to_html(md)
+    assert "<h2>AI 技术前沿日报 · 2026-11-20</h2>" in out
+    assert "<h3>1. TideCache</h3>" in out
+    assert "<strong>GitHub</strong>" in out
+    assert '<a href="https://github.com/x">原文</a>' in out
+    assert "<hr>" in out
+    assert "##" not in out.replace("</h2>", "").replace("</h3>", "")  # 标题符号被消化掉
+
+
+def test_markdown_to_html_escapes_raw_html():
+    from aidaily.notifiers.email import markdown_to_html
+
+    out = markdown_to_html('## <script>alert("x")</script>')
+    assert "&lt;script&gt;" in out
+    assert "<script>" not in out
+
+
+def test_email_message_has_html_alternative(settings):
+    settings.smtp_user = "sender@qq.com"
+    settings.mail_to = "a@qq.com"
+    notifier = EmailNotifier(settings)
+    msg = notifier.build_message("AI 日报", "## 标题\n内容")
+    html_body = msg.get_body(preferencelist=("html",)).get_content()
+    assert "<h3>标题</h3>" in html_body

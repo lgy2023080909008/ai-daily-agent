@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import html
 import logging
+import re
 import smtplib
 from email.message import EmailMessage
 
@@ -21,6 +22,55 @@ from ..config import Settings
 from .base import Notifier
 
 log = logging.getLogger(__name__)
+
+_LINK = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
+_BOLD = re.compile(r"\*\*([^*]+)\*\*")
+_CODE = re.compile(r"`([^`]+)`")
+
+
+def _inline(text: str) -> str:
+    """行内元素：链接、加粗、行内代码。输入必须已经过 html.escape。"""
+    text = _LINK.sub(r'<a href="\2">\1</a>', text)
+    text = _BOLD.sub(r"<strong>\1</strong>", text)
+    text = _CODE.sub(r"<code>\1</code>", text)
+    return text
+
+
+def markdown_to_html(markdown: str) -> str:
+    """把日报用的 Markdown 转成邮件友好的 HTML。
+
+    只支持我们实际用到的那几种语法（标题、引用、分隔线、链接、加粗、行内代码），
+    不引第三方 markdown 库——依赖越少越好，行为也完全可控。
+    """
+    blocks: list[str] = []
+    for raw in markdown.splitlines():
+        line = html.escape(raw.rstrip())
+        if not line.strip():
+            continue
+        if line.startswith("### "):
+            blocks.append(f"<h4>{_inline(line[4:])}</h4>")
+        elif line.startswith("## "):
+            blocks.append(f"<h3>{_inline(line[3:])}</h3>")
+        elif line.startswith("# "):
+            blocks.append(f"<h2>{_inline(line[2:])}</h2>")
+        elif line.startswith("&gt; "):
+            blocks.append(f'<p class="quote">{_inline(line[5:])}</p>')
+        elif line.strip() in ("---", "***"):
+            blocks.append("<hr>")
+        else:
+            blocks.append(f"<p>{_inline(line)}</p>")
+
+    body = "\n".join(blocks)
+    return (
+        "<div style=\"font-family:-apple-system,'Microsoft YaHei',sans-serif;"
+        "font-size:14px;line-height:1.75;color:#1a1a1a;max-width:720px\">\n"
+        "<style>h2{font-size:19px;margin:18px 0 10px}h3{font-size:16px;margin:16px 0 8px;"
+        "color:#1F3864}h4{font-size:14px;margin:12px 0 6px}"
+        ".quote{color:#666;font-size:13px;border-left:3px solid #C9D3E0;padding-left:10px;margin:8px 0}"
+        "a{color:#1F3864}hr{border:none;border-top:1px solid #e5e5e5;margin:16px 0}"
+        "p{margin:6px 0}</style>\n"
+        f"{body}\n</div>"
+    )
 
 
 class EmailNotifier(Notifier):
@@ -46,14 +96,10 @@ class EmailNotifier(Notifier):
         msg["Subject"] = title
         msg["From"] = self.user
         msg["To"] = ", ".join(self.recipients)
+        # 纯文本兜底（不支持 HTML 的客户端）
         msg.set_content(markdown)
-        # 再加一份 HTML：等宽字体保住 Markdown 的对齐和链接可点
-        msg.add_alternative(
-            f"<pre style=\"font-family:Consolas,'Microsoft YaHei',monospace;"
-            f"white-space:pre-wrap;font-size:14px;line-height:1.6\">"
-            f"{html.escape(markdown)}</pre>",
-            subtype="html",
-        )
+        # HTML 版：正常排版，手机上看不再是一堆 ## 和 **
+        msg.add_alternative(markdown_to_html(markdown), subtype="html")
         return msg
 
     def send(self, title: str, markdown: str) -> bool:
