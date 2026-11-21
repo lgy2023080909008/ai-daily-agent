@@ -2,9 +2,11 @@ name: daily
 
 on:
   schedule:
-    # GitHub Actions 的 cron 用 UTC 时间：UTC 00:00 = 北京时间 08:00
-    # 注意：国内没有夏令时，全年都是 +8，所以不需要考虑时区切换
-    - cron: "0 0 * * *"
+    # GitHub Actions 的 cron 用 UTC：UTC 00:xx = 北京时间 08:xx
+    # 为什么不写 0 0 * * *：官方文档说明整点（:00）是调度最拥堵的时刻，
+    # 排在整点的任务经常被延迟，高峰期甚至会被直接丢弃。
+    # 错开到 :07 能显著降低被丢的概率（国内无夏令时，全年 +8）。
+    - cron: "7 0 * * *"
   workflow_dispatch: {}   # 支持手动触发，方便调试
 
 # 同一个时间只跑一个，避免手动触发和定时撞车
@@ -29,6 +31,20 @@ jobs:
 
       - name: Run unit tests
         run: python -m pytest -q
+
+      # 关键：Actions 每次都是全新容器，不挂载的话 data/aidaily.db 每天从零开始，
+      # 于是"同一篇不重复推"的逻辑在 CI 里等于没生效（每天都会重复挑选同样内容）。
+      # 用 cache 把 SQLite 和抓取缓存带过来，key 用 run_id 保证每次都能写入新缓存，
+      # restore-keys 前缀保证能拿回最近一次的库。
+      - name: Restore digest state
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/aidaily.db
+            data/cache
+          key: aidaily-state-${{ github.run_id }}
+          restore-keys: |
+            aidaily-state-
 
       - name: Generate and push digest
         env:
